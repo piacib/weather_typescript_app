@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useGeoLocation from '../../hooks/useGeolocation'
 import {
     CitySearchContainer,
@@ -6,6 +6,7 @@ import {
 } from './CitySearch.style'
 import magnifyingGlass from './magnifying-glass.svg'
 const CitySearch = () => {
+    const [city, setCity] = useState<string>('')
     const {location, } = useGeoLocation()
     const {lat, lng} = location.coordinates
     
@@ -15,7 +16,7 @@ const CitySearch = () => {
     return (
         <CitySearchContainer>
             <img src={magnifyingGlass} alt='Magnifying glass' />
-            <CitySearchInput placeholder={(!lat && !lng) ? defaultPlaceHolder: locationFoundPlaceHolder} type='text'/>
+            <CitySearchInput value={city} onChange={(e) => setCity(e.target.value)} placeholder={(!lat && !lng) ? defaultPlaceHolder: locationFoundPlaceHolder} type='text'/>
         </CitySearchContainer>
     )
 }
