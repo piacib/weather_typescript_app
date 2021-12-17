@@ -1,6 +1,17 @@
 import styled from "styled-components";
 
+export const DateContainer = styled.div`
+display: flex;
+flex-direction: row;
+
+`
+
 export const WeatherCardContainer = styled.div``
+export const WhiteLine = styled.div`
+width:3px; 
+height: 1rem;
+margin: 0 5px;
+background-color: ${props => props.theme.fontColor}`
 export const Date = styled.div``
 export const WeekDate = styled.div``
 export const WindSpeed = styled.div``

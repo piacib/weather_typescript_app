@@ -5,6 +5,7 @@ import {
 Rain,
 Humidity,
 Snow,
+WindSpeed,
 Pressure
 } from './WeatherData.style'
 interface WeatherDataProps {
@@ -12,6 +13,8 @@ interface WeatherDataProps {
     humidity: number;
     snow: number;
     pressure: number;
+    windSpeed:  number;
+
     
 }
 export const WeatherData:React.FC<WeatherDataProps> = ({
@@ -19,11 +22,13 @@ export const WeatherData:React.FC<WeatherDataProps> = ({
     humidity,
     snow,
     pressure,
+    windSpeed
     }) => {
     return <WeatherDataContainer>
-    <Rain>{rain}</Rain>
-    <Humidity>{humidity}</Humidity>
-    <Snow>{snow}</Snow>
-    <Pressure>{pressure}</Pressure>
-</WeatherDataContainer>
+              <Rain>{rain}</Rain>
+              <Humidity>{humidity}</Humidity>
+              <WindSpeed>{windSpeed}</WindSpeed>
+              <Snow>{snow}</Snow>
+              <Pressure>{pressure}</Pressure>
+            </WeatherDataContainer>
 }

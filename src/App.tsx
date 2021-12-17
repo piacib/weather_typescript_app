@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
+import { AppContainer } from './App.styles';
 import CitySearch from './components/CitySearch/CitySearch';
 function App() {
   return (
-    <div className="App"> 
-       <CitySearch />
-      </div>
+    <AppContainer>
+     <CitySearch />
+    </AppContainer>
   );
 }
 

@@ -3,52 +3,35 @@ import {
     WeatherCardContainer,
     Date,
     WeekDate,
-    WindSpeed,
-    Rain,
-    Humidity,
-    Snow,
     Temperature,
-    Pressure,
+    DateContainer,
+    WhiteLine,
     WeatherDescription
 } from './WeatherCard.style'
+
 interface WeatherDisplayProps {
     dayOfTheWeek: string;
     todaysDate: string;
-    windSpeed:  number;
-    rain: number;
-    humidity: number;
-    snow: number;
     temperature: number;
-    pressure:number;
     weatherDescription: string;
 }
 
 const WeatherCard:React.FC<WeatherDisplayProps> = ({
     dayOfTheWeek,
     todaysDate,
-    windSpeed,
-    rain,
-    humidity,
-    snow,
-    pressure,
     temperature,
     weatherDescription 
 }) => {
     return (
         <WeatherCardContainer>
+            <DateContainer>
+
             <Date>{dayOfTheWeek}</Date>
+            <WhiteLine/>
             <WeekDate>{todaysDate}</WeekDate>
-            <WindSpeed>{windSpeed}</WindSpeed>
-            <WeatherData>
-            <Rain>{rain}</Rain>
-                <Humidity>{humidity}</Humidity>
-                <Snow>{snow}</Snow>
-                <Pressure>{pressure}</Pressure>
-            </WeatherData>
+            </DateContainer>
             <Temperature>{temperature}</Temperature>
             <WeatherDescription>{weatherDescription}</WeatherDescription>
-
-
         </WeatherCardContainer>
     )
 }
