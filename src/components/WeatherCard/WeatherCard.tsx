@@ -1,4 +1,5 @@
 import React from 'react'
+import SvgSprite from '../SvgSpriteLoader'
 import {
     WeatherCardContainer,
     Date,
@@ -8,6 +9,7 @@ import {
     WhiteLine,
     WeatherDescription
 } from './WeatherCard.style'
+import { WeatherData } from './WeatherData'
 
 interface WeatherDisplayProps {
     dayOfTheWeek: string;
@@ -24,14 +26,15 @@ const WeatherCard:React.FC<WeatherDisplayProps> = ({
 }) => {
     return (
         <WeatherCardContainer>
+            <SvgSprite type='static' image='rainy-1'/>
             <DateContainer>
-
             <Date>{dayOfTheWeek}</Date>
             <WhiteLine/>
             <WeekDate>{todaysDate}</WeekDate>
             </DateContainer>
-            <Temperature>{temperature}</Temperature>
+            <Temperature>{temperature}<span>&#176;</span></Temperature>
             <WeatherDescription>{weatherDescription}</WeatherDescription>
+            
         </WeatherCardContainer>
     )
 }
