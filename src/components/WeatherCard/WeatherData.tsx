@@ -1,4 +1,5 @@
 import React from 'react';
+import SvgSprite from '../SvgSpriteLoader';
 
 import {
     WeatherDataContainer,
@@ -14,9 +15,39 @@ interface WeatherDataProps {
     snow: number;
     pressure: number;
     windSpeed:  number;
-
-    
 }
+const WindSVG = () => (
+    <SvgSprite 
+                    width={32}
+                    height={32}
+                    type='static' 
+                    image='rainy-6'/>
+                
+)
+const RainSVG = () => (
+    <SvgSprite 
+                    width={32}
+                    height={32}
+                    type='static' 
+                    image='rainy-6'/>
+                
+)
+const PressureSVG = () => (
+    <SvgSprite 
+                    width={32}
+                    height={32}
+                    type='static' 
+                    image='rainy-6'/>
+                
+)
+const HumiditySVG = () => (
+    <SvgSprite 
+                    width={32}
+                    height={32}
+                    type='static' 
+                    image='rainy-6'/>
+                
+)
 export const WeatherData:React.FC<WeatherDataProps> = ({
     rain,
     humidity,
@@ -24,11 +55,15 @@ export const WeatherData:React.FC<WeatherDataProps> = ({
     pressure,
     windSpeed
     }) => {
-    return <WeatherDataContainer>
-              <Rain>{rain}</Rain>
-              <Humidity>{humidity}</Humidity>
-              <WindSpeed>{windSpeed}</WindSpeed>
-              <Snow>{snow}</Snow>
-              <Pressure>{pressure}</Pressure>
+    return (
+            <WeatherDataContainer>
+                <WindSVG />
+                <WindSpeed>{windSpeed}</WindSpeed>
+                <RainSVG />
+                <Rain>{rain}</Rain>
+                <PressureSVG />
+                <Pressure>{pressure}</Pressure>
+                <HumiditySVG />
+                <Humidity>{humidity}</Humidity>
             </WeatherDataContainer>
-}
+)}
