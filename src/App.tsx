@@ -4,7 +4,7 @@ import CitySearch from './components/CitySearch/CitySearch';
 function App() {
   return (
     <AppContainer>
-     <CitySearch />
+      <CitySearch />
     </AppContainer>
   );
 }
