@@ -40,13 +40,13 @@ const CitySearch = () => {
                 temperature = {weatherCardTestObject.temperature}
                 weatherDescription = {weatherCardTestObject.weatherDescription}
                 >
+            </WeatherCard>
                     <WeatherData                 
                         rain = {weatherCardTestObject.rain}
                         humidity = {weatherCardTestObject.humidity}
                         pressure = {weatherCardTestObject.pressure}
                         snow = {weatherCardTestObject.snow}
                         windSpeed = {weatherCardTestObject.windSpeed}/> 
-            </WeatherCard>
         </>
     )
 }
