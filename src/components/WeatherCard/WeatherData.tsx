@@ -3,49 +3,61 @@ import SvgSprite from '../SvgSpriteLoader';
 
 import {
     WeatherDataContainer,
-Rain,
-Humidity,
-Snow,
-WindSpeed,
-Pressure
-} from './WeatherData.style'
+DataDisplayContainer,
+DataTextContainer,
+DataNumberDisplay
+} from './WeatherData.style';
+import theme from '../../theme';
 interface WeatherDataProps {
     rain: number;
     humidity: number;
     snow: number;
     pressure: number;
     windSpeed:  number;
+    windUnits:  string;
+    pressureUnits:  string;
 }
+
+const svgSize = theme.dataSvgSize ;
 const WindSVG = () => (
     <SvgSprite 
-                    width={32}
-                    height={32}
+                    width={svgSize}
+                    height={svgSize}
                     type='static' 
-                    image='rainy-6'/>
+                    image='wind'
+                    style={{gridRow:'span 2', alignSelf:'center'}}
+                    />
                 
 )
 const RainSVG = () => (
     <SvgSprite 
-                    width={32}
-                    height={32}
+                    width={svgSize}
+                    height={svgSize}
                     type='static' 
-                    image='rainy-6'/>
+                    image='rain'
+                    style={{gridRow:'span 2', alignSelf:'center'}}
+                    />
                 
 )
 const PressureSVG = () => (
     <SvgSprite 
-                    width={32}
-                    height={32}
+                    width={svgSize}
+                    height={svgSize}
                     type='static' 
-                    image='rainy-6'/>
+                    image='pressure'
+                    style={{gridRow:'span 2', alignSelf:'center'}}
+
+                    />
                 
 )
 const HumiditySVG = () => (
     <SvgSprite 
-                    width={32}
-                    height={32}
+                    width={svgSize}
+                    height={svgSize}
                     type='static' 
-                    image='rainy-6'/>
+                    image='humidity'
+                    style={{gridRow:'span 2', alignSelf:'center'}}
+                    />
                 
 )
 export const WeatherData:React.FC<WeatherDataProps> = ({
@@ -53,17 +65,31 @@ export const WeatherData:React.FC<WeatherDataProps> = ({
     humidity,
     snow,
     pressure,
-    windSpeed
-    }) => {
+    pressureUnits,
+    windSpeed,
+    windUnits
+}) => {
     return (
-            <WeatherDataContainer>
+        <WeatherDataContainer>
+            <DataDisplayContainer>
                 <WindSVG />
-                <WindSpeed>{windSpeed}</WindSpeed>
+                <DataNumberDisplay>{windSpeed} {windUnits}</DataNumberDisplay>
+                <DataTextContainer>Wind</DataTextContainer>
+            </DataDisplayContainer>
+            <DataDisplayContainer>
                 <RainSVG />
-                <Rain>{rain}</Rain>
+                <DataNumberDisplay>{rain}%</DataNumberDisplay>
+                <DataTextContainer>Chance of Rain</DataTextContainer>
+            </DataDisplayContainer>
+            <DataDisplayContainer>
                 <PressureSVG />
-                <Pressure>{pressure}</Pressure>
+                <DataNumberDisplay>{pressure} {pressureUnits}</DataNumberDisplay>
+                <DataTextContainer>Pressure</DataTextContainer>
+            </DataDisplayContainer>
+            <DataDisplayContainer>
                 <HumiditySVG />
-                <Humidity>{humidity}</Humidity>
-            </WeatherDataContainer>
+                <DataNumberDisplay>{humidity}%</DataNumberDisplay>
+                <DataTextContainer>Humidity {humidity}%</DataTextContainer>
+            </DataDisplayContainer>
+        </WeatherDataContainer>
 )}
