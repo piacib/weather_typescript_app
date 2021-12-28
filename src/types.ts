@@ -19,4 +19,8 @@ export type ImageFiles = "thunder"|
 "snowy-3"|
 "snowy-4"|
 "snowy-5"|
-"snowy-6" 
+"snowy-6"|
+"pressure"|
+"rain"|
+"wind"|
+"humidity"
