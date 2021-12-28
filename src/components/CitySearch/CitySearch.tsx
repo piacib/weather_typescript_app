@@ -17,19 +17,19 @@ const weatherCardTestObject = {
     snow:0,
     temperature:24,
     weatherDescription:'Heavy Rain',
+    windUnits: 'km/h',
+    pressureUnits: 'mbar',
 }
 const CitySearch = () => {
     const [city, setCity] = useState<string>('')
     const {location, } = useGeoLocation()
     const {lat, lng} = location.coordinates
-    
     const defaultPlaceHolder = 'Search your city';
     const locationFoundPlaceHolder = 'Press search to use your location';
 
     return (
         <>
         <CitySearchContainer>
-            
             <img src={magnifyingGlass} alt='Magnifying glass' />
             <CitySearchInput value={city} onChange={(e) => setCity(e.target.value)} placeholder={(!lat && !lng) ? defaultPlaceHolder: locationFoundPlaceHolder} type='text'/>
         </CitySearchContainer>
@@ -46,7 +46,10 @@ const CitySearch = () => {
                         humidity = {weatherCardTestObject.humidity}
                         pressure = {weatherCardTestObject.pressure}
                         snow = {weatherCardTestObject.snow}
-                        windSpeed = {weatherCardTestObject.windSpeed}/> 
+                        windSpeed = {weatherCardTestObject.windSpeed}
+                        windUnits={weatherCardTestObject.windUnits}
+                        pressureUnits={weatherCardTestObject.pressureUnits}
+                        /> 
         </>
     )
 }
