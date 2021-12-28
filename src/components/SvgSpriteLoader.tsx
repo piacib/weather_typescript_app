@@ -5,10 +5,11 @@ interface Props {
     type: 'static' | 'animated';
     width?: number;
     height?: number;
+    style?: any;
 }
-const SvgSprite:React.FC <Props> = ({image, type, width = undefined, height = undefined}) => {
+const SvgSprite:React.FC <Props> = ({image, type, width = undefined, height = undefined, style = undefined}) => {
     return (
-        <svg width={width} height={height}>
+        <svg width={width} height={height} style={style}>
             <use href={`/icons/${type}/weather-sprite.svg#${image}`} />
         </svg>
     )
