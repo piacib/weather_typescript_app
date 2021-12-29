@@ -1,5 +1,5 @@
 import React from 'react'
-import SvgSprite from '../SvgSpriteLoader'
+import SvgSprite from '../../utils/SvgSpriteLoader'
 import {
     WeatherCardContainer,
     Date,
