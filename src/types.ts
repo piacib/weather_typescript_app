@@ -1,0 +1,26 @@
+export type ImageFiles = "thunder"|
+    "day"|
+    "night"|
+    "cloudy-day-1"|
+    "cloudy-night-1"|
+    "cloudy-day-2"|
+    "cloudy-night-2"|
+    "cloudy-day-3"|
+    "cloudy-night-3"|
+    "cloudy"|
+    "rainy-1"|
+    "rainy-2"|
+    "rainy-3"|
+    "rainy-4"|
+    "rainy-5"|
+    "rainy-6"|
+    "rainy-7"|
+    "snowy-1"|
+    "snowy-3"|
+    "snowy-4"|
+    "snowy-5"|
+    "snowy-6"|
+    "pressure"|
+    "rain"|
+    "wind"|
+    "humidity"
