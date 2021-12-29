@@ -1,5 +1,5 @@
 import React from 'react';
-import SvgSprite from '../SvgSpriteLoader';
+import SvgSprite from '../../utils/SvgSpriteLoader';
 
 import {
     WeatherDataContainer,
@@ -73,7 +73,7 @@ export const WeatherData:React.FC<WeatherDataProps> = ({
         <WeatherDataContainer>
             <DataDisplayContainer>
                 <WindSVG />
-                <DataNumberDisplay>{windSpeed} {windUnits}</DataNumberDisplay>
+                <DataNumberDisplay>{windSpeed}</DataNumberDisplay>
                 <DataTextContainer>Wind</DataTextContainer>
             </DataDisplayContainer>
             <DataDisplayContainer>
