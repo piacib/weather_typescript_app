@@ -3,7 +3,19 @@ import WeatherCard from "../WeatherCard/WeatherCard";
 import { WeatherData } from "../WeatherCard/WeatherData";
 import magnifyingGlass from "./magnifying-glass.svg";
 import { CitySearchContainer, CitySearchInput } from "./CitySearch.style";
+import { AutoComplete } from "./AutoComplete";
 import { Coordinates } from "./CitySearch.types";
+
+type CityEntry = {
+  key: number;
+  value: string;
+  text: string;
+  longitude: number;
+  latitude: number;
+};
+const usCities: CityEntry[] = require("./usCities.json");
+const usCityName = usCities.map((entry) => entry.text);
+
 const weatherCardTestObject = {
   dayOfTheWeek: "Sunday",
   todaysDate: "Nov 14",
@@ -64,7 +76,6 @@ const month = [
   "Nov",
   "Dec",
 ];
-
 interface CitySearchInputProps {
   coordinates: Coordinates;
   weatherDaily: any;
@@ -76,16 +87,31 @@ const CitySearch: React.FC<CitySearchInputProps> = ({
   weatherHourly,
 }) => {
   const [city, setCity] = useState<string>("");
+  const [autocompleteVisible, setAutocompleteVisible] =
+    useState<boolean>(false);
+  const [autocompleteSelected, setAutocompleteSelected] =
+    useState<boolean>(false);
+
+  const [inputSelected, setInputSelected] = useState<boolean>(false);
   const date = weatherDaily[0]
     ? new Date(weatherDaily[0].startTime)
     : new Date();
-
   return (
     <>
       <CitySearchContainer>
         <img src={magnifyingGlass} alt="Magnifying glass" />
         <CitySearchInput
           value={city}
+          onFocus={(e) => {
+            setInputSelected(true);
+            setAutocompleteVisible(true);
+          }}
+          onBlur={(e) => {
+            setInputSelected(false);
+            if (autocompleteSelected) {
+              setAutocompleteVisible(false);
+            }
+          }}
           onChange={(e) => setCity(e.target.value)}
           placeholder={
             !coordinates.lat && !coordinates.lng
@@ -94,6 +120,20 @@ const CitySearch: React.FC<CitySearchInputProps> = ({
           }
           type="text"
         />
+        {inputSelected || autocompleteVisible ? (
+          <AutoComplete
+            onClick={(e) => {
+              setAutocompleteSelected(true);
+            }}
+            options={usCityName}
+            filter={city}
+            optionsDisplayLength={8}
+            optionSelectFunction={(x: string) => {
+              setCity(x);
+              setAutocompleteSelected(true);
+            }}
+          />
+        ) : null}
       </CitySearchContainer>
       {weatherDaily && weatherDaily[0] ? (
         <>
