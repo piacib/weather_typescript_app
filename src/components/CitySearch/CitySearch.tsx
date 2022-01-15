@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import { WeatherData } from "../WeatherCard/WeatherData";
 import magnifyingGlass from "./magnifying-glass.svg";
-import { CitySearchContainer, CitySearchInput } from "./CitySearch.style";
+import {
+  Container,
+  CitySearchContainer,
+  CitySearchInput,
+} from "./CitySearch.style";
 import { AutoComplete } from "./AutoComplete";
 import { Coordinates } from "./CitySearch.types";
+import { useWeatherFetch } from "../../hooks/useWeatherFetch";
+import useGeoLocation from "../../hooks/useGeolocation";
 
 type CityEntry = {
   key: number;
@@ -76,45 +82,63 @@ const month = [
   "Nov",
   "Dec",
 ];
-interface CitySearchInputProps {
-  coordinates: Coordinates;
-  weatherDaily: any;
-  weatherHourly: any;
-}
-const CitySearch: React.FC<CitySearchInputProps> = ({
-  coordinates,
-  weatherDaily,
-  weatherHourly,
-}) => {
+const CitySearch = () => {
+  const { location, status: geoLocationStatus } = useGeoLocation();
   const [city, setCity] = useState<string>("");
+  const [searchedLocation, setSearchedLocation] = useState<Coordinates>({
+    lat: 0,
+    lng: 0,
+  });
   const [autocompleteVisible, setAutocompleteVisible] =
     useState<boolean>(false);
   const [autocompleteSelected, setAutocompleteSelected] =
     useState<boolean>(false);
-
   const [inputSelected, setInputSelected] = useState<boolean>(false);
+  const {
+    weatherDaily,
+    weatherHourly,
+  } = useWeatherFetch(searchedLocation);
   const date = weatherDaily[0]
     ? new Date(weatherDaily[0].startTime)
     : new Date();
+  useEffect(() => {
+    console.log("checking city");
+    const result = usCities.find((usCity) => usCity.text === city);
+    if (result) {
+      console.log("searching input");
+      setSearchedLocation({ lat: result.latitude, lng: result.longitude });
+    } else if (geoLocationStatus === "loaded") {
+      console.log("searching geo");
+      if (
+        location.lat !== searchedLocation.lat &&
+        location.lng !== searchedLocation.lng
+      ) {
+        setSearchedLocation(location);
+      }
+    }
+  }, [city, geoLocationStatus, location]);
+  console.log("_____");
   return (
-    <>
+    <Container>
       <CitySearchContainer>
         <img src={magnifyingGlass} alt="Magnifying glass" />
         <CitySearchInput
           value={city}
           onFocus={(e) => {
+            console.log("input selected");
             setInputSelected(true);
+            setAutocompleteSelected(false);
             setAutocompleteVisible(true);
           }}
           onBlur={(e) => {
             setInputSelected(false);
             if (autocompleteSelected) {
-              setAutocompleteVisible(false);
+              // setAutocompleteVisible(false);
             }
           }}
           onChange={(e) => setCity(e.target.value)}
           placeholder={
-            !coordinates.lat && !coordinates.lng
+            !location.lat && !location.lng
               ? defaultPlaceHolder
               : locationFoundPlaceHolder
           }
@@ -123,31 +147,33 @@ const CitySearch: React.FC<CitySearchInputProps> = ({
         {inputSelected || autocompleteVisible ? (
           <AutoComplete
             onClick={(e) => {
+              console.log("autocomplete selected");
               setAutocompleteSelected(true);
             }}
             options={usCityName}
             filter={city}
             optionsDisplayLength={8}
             optionSelectFunction={(x: string) => {
+              console.log("option selected");
               setCity(x);
+              setAutocompleteVisible(false);
               setAutocompleteSelected(true);
             }}
           />
         ) : null}
       </CitySearchContainer>
+
       {weatherDaily && weatherDaily[0] ? (
-        <>
-          <WeatherCard
-            dayOfTheWeek={weekday[date.getDay()]}
-            todaysDate={`${month[date.getMonth()]} ${date.getDate()}`}
-            temperature={weatherDaily[0].temperature}
-            weatherDescription={weatherDaily[0].shortForecast}
-          ></WeatherCard>
-        </>
+        <WeatherCard
+          dayOfTheWeek={weekday[date.getDay()]}
+          todaysDate={`${month[date.getMonth()]} ${date.getDate()}`}
+          temperature={weatherDaily[0].temperature}
+          weatherDescription={weatherDaily[0].shortForecast}
+        />
       ) : (
         <WeatherExampleCard />
       )}
-    </>
+    </Container>
   );
 };
 
