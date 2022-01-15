@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 export const AutoCompleteContainer = styled.div`
-  /* max-height: 10em; */
   width: 15em;
   margin: 0 56px;
   background-color: green;
-  /* overflow-y: scroll; */
-  position: fixed;
-  top: 5.75em;
+  position: absolute;
+  top: calc(
+    ${(props) => props.theme.citySearchContainer.height} +
+      calc(${(props) => props.theme.citySearchContainer.padding} * 2)
+  );
 `;
 export const Option = styled.div`
   cursor: pointer;
