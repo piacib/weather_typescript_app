@@ -6,11 +6,14 @@ import {
   Container,
   CitySearchContainer,
   CitySearchInput,
+  MagnifyingGlassImage,
 } from "./CitySearch.style";
 import { AutoComplete } from "./AutoComplete";
 import { Coordinates } from "./CitySearch.types";
 import { useWeatherFetch } from "../../hooks/useWeatherFetch";
 import useGeoLocation from "../../hooks/useGeolocation";
+import Loading from "./Loading";
+import Failed from "./Failed";
 
 type CityEntry = {
   key: number;
@@ -82,6 +85,11 @@ const month = [
   "Nov",
   "Dec",
 ];
+const states = {
+  inputSelected: "inputSelected",
+  autoSelected: "autoSelected",
+  nullState: "",
+};
 const CitySearch = () => {
   const { location, status: geoLocationStatus } = useGeoLocation();
   const [city, setCity] = useState<string>("");
@@ -94,13 +102,26 @@ const CitySearch = () => {
   const [autocompleteSelected, setAutocompleteSelected] =
     useState<boolean>(false);
   const [inputSelected, setInputSelected] = useState<boolean>(false);
-  const {
-    weatherDaily,
-    weatherHourly,
-  } = useWeatherFetch(searchedLocation);
+  const { weatherDaily, status, weatherHourly } =
+    useWeatherFetch(searchedLocation);
   const date = weatherDaily[0]
     ? new Date(weatherDaily[0].startTime)
     : new Date();
+  console.log(status);
+  // handles autocomlete visibility
+  useEffect(() => {
+    if (autocompleteSelected) {
+      console.log("useEffect autocompleteSelected");
+      setAutocompleteVisible(false);
+    } else if (inputSelected) {
+      console.log("useEffect inputSelcted");
+      setAutocompleteVisible(true);
+    }
+    if (!autocompleteSelected && !inputSelected) {
+      setAutocompleteVisible(false);
+    }
+  }, [autocompleteSelected, inputSelected]);
+  // handles setting search location coords
   useEffect(() => {
     console.log("checking city");
     const result = usCities.find((usCity) => usCity.text === city);
@@ -108,11 +129,11 @@ const CitySearch = () => {
       console.log("searching input");
       setSearchedLocation({ lat: result.latitude, lng: result.longitude });
     } else if (geoLocationStatus === "loaded") {
-      console.log("searching geo");
       if (
         location.lat !== searchedLocation.lat &&
         location.lng !== searchedLocation.lng
       ) {
+        console.log("searching geo");
         setSearchedLocation(location);
       }
     }
@@ -121,16 +142,15 @@ const CitySearch = () => {
   return (
     <Container>
       <CitySearchContainer>
-        <img src={magnifyingGlass} alt="Magnifying glass" />
+        <MagnifyingGlassImage src={magnifyingGlass} alt="Magnifying glass" />
         <CitySearchInput
           value={city}
           onFocus={(e) => {
             console.log("input selected");
-            setInputSelected(true);
-            setAutocompleteSelected(false);
             setAutocompleteVisible(true);
           }}
           onBlur={(e) => {
+            console.log("blur");
             setInputSelected(false);
             if (autocompleteSelected) {
               // setAutocompleteVisible(false);
@@ -144,11 +164,10 @@ const CitySearch = () => {
           }
           type="text"
         />
-        {inputSelected || autocompleteVisible ? (
+        {autocompleteVisible ? (
           <AutoComplete
             onClick={(e) => {
               console.log("autocomplete selected");
-              setAutocompleteSelected(true);
             }}
             options={usCityName}
             filter={city}
@@ -156,23 +175,26 @@ const CitySearch = () => {
             optionSelectFunction={(x: string) => {
               console.log("option selected");
               setCity(x);
-              setAutocompleteVisible(false);
               setAutocompleteSelected(true);
             }}
           />
         ) : null}
       </CitySearchContainer>
 
-      {weatherDaily && weatherDaily[0] ? (
-        <WeatherCard
-          dayOfTheWeek={weekday[date.getDay()]}
-          todaysDate={`${month[date.getMonth()]} ${date.getDate()}`}
-          temperature={weatherDaily[0].temperature}
-          weatherDescription={weatherDaily[0].shortForecast}
-        />
-      ) : (
-        <WeatherExampleCard />
-      )}
+      {status === "searching" && <Loading />}
+      {status === "loaded" ? (
+        weatherDaily && weatherDaily[0] ? (
+          <WeatherCard
+            dayOfTheWeek={weekday[date.getDay()]}
+            todaysDate={`${month[date.getMonth()]} ${date.getDate()}`}
+            temperature={weatherDaily[0].temperature}
+            weatherDescription={weatherDaily[0].shortForecast}
+          />
+        ) : (
+          <WeatherExampleCard />
+        )
+      ) : null}
+      {status === "failed" && <Failed />}
     </Container>
   );
 };
