@@ -12,6 +12,7 @@ const theme: DefaultTheme = {
   citySearchContainer: {
     height: "2rem",
     padding: "10px",
+    widthMagnifyingGlassImage: "2rem",
   },
 };
 export default theme;

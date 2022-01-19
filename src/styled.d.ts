@@ -14,6 +14,7 @@ declare module "styled-components" {
     citySearchContainer: {
       height: string;
       padding: string;
+      widthMagnifyingGlassImage: string;
     };
   }
 }
