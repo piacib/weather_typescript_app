@@ -62,14 +62,22 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   optionSelectFunction,
 }) => {
   return (
-    <AutoCompleteContainer>
+    <>
       {autocompleteOptionsFilter({
         options: options,
         filter: filter,
         optionsDisplayLength: optionsDisplayLength,
-      }).map((x) => (
-        <Option onClick={() => optionSelectFunction(x)}>{x}</Option>
-      ))}
-    </AutoCompleteContainer>
+      }).length > 0 ? (
+        <AutoCompleteContainer>
+          {autocompleteOptionsFilter({
+            options: options,
+            filter: filter,
+            optionsDisplayLength: optionsDisplayLength,
+          }).map((x) => (
+            <Option onClick={() => optionSelectFunction(x)}>{x}</Option>
+          ))}
+        </AutoCompleteContainer>
+      ) : null}
+    </>
   );
 };

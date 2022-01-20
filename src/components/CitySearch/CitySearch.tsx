@@ -14,7 +14,6 @@ import { useWeatherFetch } from "../../hooks/useWeatherFetch";
 import useGeoLocation from "../../hooks/useGeolocation";
 import Loading from "./Loading";
 import Failed from "./Failed";
-
 type CityEntry = {
   key: number;
   value: string;
