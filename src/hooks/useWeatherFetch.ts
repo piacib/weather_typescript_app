@@ -1,7 +1,22 @@
 import { useState, useEffect } from "react";
 import isDevModeConsoleLog from "../utils/isDevModeConsoleLog";
 export type statusType = "idle" | "searching" | "loaded" | "failed";
-export type weatherType = any;
+export type ForecastEntry = {
+  number: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+  isDaytime: boolean;
+  temperature: number;
+  temperatureUnit: string;
+  temperatureTrend: null | string;
+  windSpeed: string;
+  windDirection: string;
+  icon: string;
+  shortForecast: string;
+  detailedForecast: string;
+};
+export type WeatherDataArray = ForecastEntry[];
 export type latLangUrlInput = {
   lat: number;
   lng: number;
@@ -18,9 +33,9 @@ const latLangURL = (coordinates: latLangUrlInput) => {
 
 export const useWeatherFetch = (coordinates: latLangUrlInput) => {
   isDevModeConsoleLog("updating useWeatherFetch");
-  const [weatherDaily, setWeatherDaily] = useState<weatherType>([]);
+  const [weatherDaily, setWeatherDaily] = useState<WeatherDataArray>([]);
   const [status, setStatus] = useState<statusType>(idle);
-  const [weatherHourly, setWeatherHourly] = useState<weatherType>([]);
+  const [weatherHourly, setWeatherHourly] = useState<WeatherDataArray>([]);
   useEffect(() => {
     const apiCalls = async () => {
       if (!coordinates.lat || !coordinates.lng) {
