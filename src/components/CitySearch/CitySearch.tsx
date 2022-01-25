@@ -6,6 +6,8 @@ import {
   CitySearchContainer,
   CitySearchInput,
   MagnifyingGlassImage,
+  WeatherDateToggle,
+  DateToggleButton,
 } from "./CitySearch.style";
 import { AutoComplete } from "./AutoComplete";
 import { Coordinates } from "./CitySearch.types";
@@ -26,29 +28,7 @@ const usCities: CityEntry[] = require("./usCities.json");
 const usCityName = usCities.map((entry) => entry.text);
 const defaultPlaceHolder = "Search your city";
 const locationFoundPlaceHolder = "Press search to use your location";
-const weekday = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-const month = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const CitySearch = () => {
   const { location, status: geoLocationStatus } = useGeoLocation();
   const [city, setCity] = useState<string>("");
@@ -56,24 +36,29 @@ const CitySearch = () => {
     lat: 0,
     lng: 0,
   });
-  const [autocompleteVisible, setAutocompleteVisible] =
-    useState<boolean>(false);
-  const [autocompleteSelected, setAutocompleteSelected] =
-    useState<boolean>(false);
+  const [autocompleteVisible, setAutocompleteVisible] = useState<boolean>(false);
+  const [autocompleteSelected, setAutocompleteSelected] = useState<boolean>(false);
   const [inputSelected, setInputSelected] = useState<boolean>(false);
-  const { weatherDaily, status, weatherHourly } =
-    useWeatherFetch(searchedLocation);
-  const [dateDisplayed, setDateDisplayed] = useState<ForecastEntry | null>(
-    null
-  );
-  const date = dateDisplayed ? new Date(dateDisplayed.startTime) : new Date();
+  const { weatherDaily, status, weatherHourly } = useWeatherFetch(searchedLocation);
+  const [dateDisplayed, setDateDisplayed] = useState<ForecastEntry | null>(null);
+  const [forecastHourlyStartEntry, setForecastHourlyStartEntry] = useState<number>(0);
+  // sets starting point in hourly array to match WeatherDateToggle
+  useEffect(() => {
+    if (dateDisplayed) {
+      const startTime = weatherHourly.filter(
+        (weather) => weather.startTime === dateDisplayed.startTime
+      );
+      console.log("startTime", startTime[0]);
+      startTime.length === 1 && setForecastHourlyStartEntry(startTime[0].number); //parseInt(startTime[0].startTime));
+    }
+  }, [dateDisplayed, weatherHourly]);
+  // sets datedisplayed when weather daily is initially loaded
   useEffect(() => {
     if (weatherDaily) {
       setDateDisplayed(weatherDaily[0]);
     }
   }, [weatherDaily]);
   // handles autocomlete visibility
-
   useEffect(() => {
     if (autocompleteSelected) {
       setAutocompleteVisible(false);
@@ -90,16 +75,13 @@ const CitySearch = () => {
     if (result) {
       setSearchedLocation({ lat: result.latitude, lng: result.longitude });
     } else if (geoLocationStatus === "loaded") {
-      if (
-        location.lat !== searchedLocation.lat &&
-        location.lng !== searchedLocation.lng
-      ) {
+      if (location.lat !== searchedLocation.lat && location.lng !== searchedLocation.lng) {
         setSearchedLocation(location);
       }
     }
+    // will cause infinite loop if searchedLocation is added so I disabled the error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [city, geoLocationStatus, location]);
-  console.log(weatherDaily);
-  console.log("_____");
   return (
     <Container>
       <CitySearchContainer>
@@ -119,9 +101,7 @@ const CitySearch = () => {
           }}
           onChange={(e) => setCity(e.target.value)}
           placeholder={
-            !location.lat && !location.lng
-              ? defaultPlaceHolder
-              : locationFoundPlaceHolder
+            !location.lat && !location.lng ? defaultPlaceHolder : locationFoundPlaceHolder
           }
           type="text"
         />
@@ -145,14 +125,30 @@ const CitySearch = () => {
       {status === "failed" && <Failed />}
       {status === "loaded" && dateDisplayed && (
         <>
+          <WeatherDateToggle
+            onChange={(e) => {
+              setDateDisplayed(weatherDaily[parseInt(e.target.value)]);
+            }}
+          >
+            {weatherDaily.map((date, idx) => (
+              <DateToggleButton value={idx} key={date.name}>
+                {date.name}
+              </DateToggleButton>
+            ))}
+          </WeatherDateToggle>
           <WeatherCard
-            dayOfTheWeek={weekday[date.getDay()]}
-            todaysDate={`${month[date.getMonth()]} ${date.getDate()}`}
+            dayOfTheWeek={dateDisplayed.name}
+            todaysDate={`${month[new Date(dateDisplayed.startTime).getMonth()]} ${new Date(
+              dateDisplayed.startTime
+            ).getDate()}`}
             temperature={dateDisplayed.temperature}
             iconSrc={dateDisplayed.icon}
             weatherDescription={dateDisplayed.shortForecast}
           />
-          <ForecastHourly forecastHourlyArray={weatherHourly} />
+          <ForecastHourly
+            startEntry={forecastHourlyStartEntry}
+            forecastHourlyArray={weatherHourly}
+          />
         </>
       )}
     </Container>
