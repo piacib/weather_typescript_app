@@ -27,3 +27,14 @@ export const CitySearchInput = styled.input`
     font-size: 0.9rem;
   }
 `;
+// WeatherDateToggle
+export const WeatherDateToggle = styled.select`
+  /* display: grid; */
+  /* flex-direction: column; */
+  /* flex-wrap: wrap; */
+  /* grid-template-columns: repeat(7, 1fr); */
+  /* grid-template-rows: repeat(2, 1fr); */
+`;
+export const DateToggleButton = styled.option`
+  width: 8rem;
+`;
