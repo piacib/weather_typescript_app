@@ -41,9 +41,9 @@ const month = [
   "Dec",
 ];
 const CitySearch = () => {
-  const { location } = useGeoLocation();
+  const { location: geoLocation } = useGeoLocation();
   const [city, setCity] = useState<string>("");
-  const [searchedLocation, setSearchedLocation] = useState<Coordinates>({
+  const [location, setLocation] = useState<Coordinates>({
     lat: 0,
     lng: 0,
   });
@@ -52,8 +52,7 @@ const CitySearch = () => {
   const [autocompleteSelected, setAutocompleteSelected] =
     useState<boolean>(false);
   const [inputSelected, setInputSelected] = useState<boolean>(false);
-  const { weatherDaily, status, weatherHourly } =
-    useWeatherFetch(searchedLocation);
+  const { weatherDaily, status, weatherHourly } = useWeatherFetch(location);
   const [dateDisplayed, setDateDisplayed] = useState<ForecastEntry | null>(
     null
   );
@@ -89,14 +88,14 @@ const CitySearch = () => {
   }, [autocompleteSelected, inputSelected]);
   // when geolocation loads sets searched location
   useEffect(() => {
-    setSearchedLocation(location);
-  }, [location]);
+    setLocation(geoLocation);
+  }, [geoLocation]);
 
   // handles setting search location coords when new city is searched
   useEffect(() => {
     const result = usCities.find((usCity) => usCity.text === city);
     if (result) {
-      setSearchedLocation({ lat: result.latitude, lng: result.longitude });
+      setLocation({ lat: result.latitude, lng: result.longitude });
     }
   }, [city]);
   return (
