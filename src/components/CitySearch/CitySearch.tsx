@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import WeatherCard from "../WeatherCard/WeatherCard";
-import magnifyingGlass from "./magnifying-glass.svg";
+import useGeoLocation from "../../hooks/useGeolocation";
+import { ForecastEntry, useWeatherFetch } from "../../hooks/useWeatherFetch";
 import {
   Container,
   CitySearchContainer,
@@ -9,12 +9,12 @@ import {
 } from "./CitySearch.style";
 import { WeatherDateToggle, DateToggleButton } from "./WeatherDateToggle.style";
 import { AutoComplete } from "../Autocomplete/AutoComplete";
+import WeatherCard from "../WeatherCard/WeatherCard";
+import ForecastHourly from "../ForecastHourly/ForecastHourly";
 import { Coordinates } from "./CitySearch.types";
-import { ForecastEntry, useWeatherFetch } from "../../hooks/useWeatherFetch";
-import useGeoLocation from "../../hooks/useGeolocation";
 import Loading from "./Loading";
 import Failed from "./Failed";
-import ForecastHourly from "../ForecastHourly/ForecastHourly";
+import magnifyingGlass from "./magnifying-glass.svg";
 
 type CityEntry = {
   key: number;
@@ -25,8 +25,7 @@ type CityEntry = {
 };
 const usCities: CityEntry[] = require("./usCities.json");
 const usCityName = usCities.map((entry) => entry.text);
-const defaultPlaceHolder = "Search your city";
-const locationFoundPlaceHolder = "Press search to use your location";
+const defaultPlaceHolder = "Search a city";
 const month = [
   "Jan",
   "Feb",
@@ -122,11 +121,7 @@ const CitySearch = () => {
             }
           }}
           onChange={(e) => setCity(e.target.value)}
-          placeholder={
-            !location.lat && !location.lng
-              ? defaultPlaceHolder
-              : locationFoundPlaceHolder
-          }
+          placeholder={defaultPlaceHolder}
           type="text"
         />
         {autocompleteVisible && (
