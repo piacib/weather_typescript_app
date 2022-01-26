@@ -2,10 +2,11 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 export const MagnifyingGlassImage = styled.img`
-  width: ${(props) =>
-    props.theme.citySearchContainer.widthMagnifyingGlassImage}; ;
+  width: ${(props) => props.theme.citySearchContainer.widthMagnifyingGlassImage}; ;
 `;
 export const CitySearchContainer = styled.div`
   background: white;
@@ -17,7 +18,6 @@ export const CitySearchContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  /* position: relative; */
 `;
 export const CitySearchInput = styled.input`
   border: none;
@@ -29,12 +29,9 @@ export const CitySearchInput = styled.input`
 `;
 // WeatherDateToggle
 export const WeatherDateToggle = styled.select`
-  /* display: grid; */
-  /* flex-direction: column; */
-  /* flex-wrap: wrap; */
-  /* grid-template-columns: repeat(7, 1fr); */
-  /* grid-template-rows: repeat(2, 1fr); */
+  width: 100px;
+  margin: 10px auto;
+  border-radius: 40px;
+  padding: 8px;
 `;
-export const DateToggleButton = styled.option`
-  width: 8rem;
-`;
+export const DateToggleButton = styled.option``;
