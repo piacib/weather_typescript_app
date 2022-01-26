@@ -6,10 +6,9 @@ import {
   CitySearchContainer,
   CitySearchInput,
   MagnifyingGlassImage,
-  WeatherDateToggle,
-  DateToggleButton,
 } from "./CitySearch.style";
-import { AutoComplete } from "./AutoComplete";
+import { WeatherDateToggle, DateToggleButton } from "./WeatherDateToggle.style";
+import { AutoComplete } from "../Autocomplete/AutoComplete";
 import { Coordinates } from "./CitySearch.types";
 import { ForecastEntry, useWeatherFetch } from "../../hooks/useWeatherFetch";
 import useGeoLocation from "../../hooks/useGeolocation";
