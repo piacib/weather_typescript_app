@@ -130,7 +130,8 @@ const CitySearch = () => {
               setDateDisplayed(weatherDaily[parseInt(e.target.value)]);
             }}
           >
-            {weatherDaily.map((date, idx) => (
+            {/* last entry has no data in weatherHourly */}
+            {weatherDaily.slice(0, -1).map((date, idx) => (
               <DateToggleButton value={idx} key={date.name}>
                 {date.name}
               </DateToggleButton>
