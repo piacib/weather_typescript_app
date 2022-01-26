@@ -1,5 +1,4 @@
 import React from "react";
-import SvgSprite from "../../utils/SvgSpriteLoader";
 import {
   WeatherCardContainer,
   Date,
@@ -8,8 +7,9 @@ import {
   DateContainer,
   WhiteLine,
   WeatherDescription,
+  WeatherIcon,
+  DegreeSymbol,
 } from "./WeatherCard.style";
-import { WeatherData } from "./WeatherData";
 
 interface WeatherDisplayProps {
   dayOfTheWeek: string;
@@ -19,6 +19,13 @@ interface WeatherDisplayProps {
   iconSrc: string;
 }
 
+const dayOfTheWeekConverter = (dayOfTheWeek: string) => {
+  const firstWord = dayOfTheWeek.toLowerCase().split(" ")[0];
+  if (firstWord === "this") {
+    return "Today";
+  }
+  return firstWord[0].toUpperCase() + firstWord.substring(1);
+};
 const WeatherCard: React.FC<WeatherDisplayProps> = ({
   dayOfTheWeek,
   todaysDate,
@@ -28,16 +35,15 @@ const WeatherCard: React.FC<WeatherDisplayProps> = ({
 }) => {
   return (
     <WeatherCardContainer>
-      <img src={iconSrc} alt={"weather"} />
-      {/* <SvgSprite type="static" image="rainy-1" /> */}
+      <WeatherIcon src={iconSrc} alt={"weather"} />
       <DateContainer>
-        <Date>{dayOfTheWeek}</Date>
+        <Date>{dayOfTheWeekConverter(dayOfTheWeek)}</Date>
         <WhiteLine />
         <WeekDate>{todaysDate}</WeekDate>
       </DateContainer>
       <Temperature>
         {temperature}
-        <span>&#176;</span>
+        <DegreeSymbol>&#176;</DegreeSymbol>
       </Temperature>
       <WeatherDescription>{weatherDescription}</WeatherDescription>
     </WeatherCardContainer>
