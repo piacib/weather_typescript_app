@@ -41,7 +41,7 @@ const month = [
   "Dec",
 ];
 const CitySearch = () => {
-  const { location, status: geoLocationStatus } = useGeoLocation();
+  const { location } = useGeoLocation();
   const [city, setCity] = useState<string>("");
   const [searchedLocation, setSearchedLocation] = useState<Coordinates>({
     lat: 0,
@@ -67,16 +67,16 @@ const CitySearch = () => {
       );
       console.log("startTime", startTime[0]);
       startTime.length === 1 &&
-        setForecastHourlyStartEntry(startTime[0].number); //parseInt(startTime[0].startTime));
+        setForecastHourlyStartEntry(startTime[0].number);
     }
   }, [dateDisplayed, weatherHourly]);
-  // sets datedisplayed when weather daily is initially loaded
+  // sets dateDisplayed when weather daily is initially loaded
   useEffect(() => {
     if (weatherDaily) {
       setDateDisplayed(weatherDaily[0]);
     }
   }, [weatherDaily]);
-  // handles autocomlete visibility
+  // handles autocomplete visibility
   useEffect(() => {
     if (autocompleteSelected) {
       setAutocompleteVisible(false);
@@ -87,22 +87,18 @@ const CitySearch = () => {
       setAutocompleteVisible(false);
     }
   }, [autocompleteSelected, inputSelected]);
-  // handles setting search location coords
+  // when geolocation loads sets searched location
+  useEffect(() => {
+    setSearchedLocation(location);
+  }, [location]);
+
+  // handles setting search location coords when new city is searched
   useEffect(() => {
     const result = usCities.find((usCity) => usCity.text === city);
     if (result) {
       setSearchedLocation({ lat: result.latitude, lng: result.longitude });
-    } else if (geoLocationStatus === "loaded") {
-      if (
-        location.lat !== searchedLocation.lat &&
-        location.lng !== searchedLocation.lng
-      ) {
-        setSearchedLocation(location);
-      }
     }
-    // will cause infinite loop if searchedLocation is added so I disabled the error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [city, geoLocationStatus, location]);
+  }, [city]);
   return (
     <Container>
       <CitySearchContainer>
