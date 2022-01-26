@@ -18,13 +18,15 @@ export const WhiteLine = styled.div`
   background-color: ${(props) => props.theme.fontColor};
 `;
 const DateContainerChildrenWidth = styled.div`
-  width: 6rem;
+  width: 8rem;
 `;
 export const Date = styled(DateContainerChildrenWidth)`
   text-align: end;
+  white-space: nowrap;
 `;
 export const WeekDate = styled(DateContainerChildrenWidth)`
   text-align: start;
+  white-space: nowrap;
 `;
 export const WindSpeed = styled.div``;
 export const Rain = styled.div``;
@@ -35,3 +37,7 @@ export const Temperature = styled.div`
 `;
 export const Pressure = styled.div``;
 export const WeatherDescription = styled.div``;
+export const WeatherIcon = styled.img``;
+export const DegreeSymbol = styled.span`
+  position: absolute;
+`;
