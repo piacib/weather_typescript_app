@@ -1,10 +1,12 @@
 import React from "react";
-import { autocompleteOptionsFilter, AutocompleteOptionsFilterTypes } from "./Autocomplete.functions";
+import {
+  autocompleteOptionsFilter,
+  AutocompleteOptionsFilterTypes,
+} from "./Autocomplete.functions";
 import { AutoCompleteContainer, Option } from "./Autocomplete.style";
 
 interface AutoCompleteProps extends AutocompleteOptionsFilterTypes {
   optionSelectFunction: any;
-  onClick: (e: Event) => void;
 }
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
   options,
