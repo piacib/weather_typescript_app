@@ -6,6 +6,7 @@ import {
   CitySearchContainer,
   CitySearchInput,
   MagnifyingGlassImage,
+  InputAutoContainer,
 } from "./CitySearch.style";
 import { WeatherDateToggle, DateToggleButton } from "./WeatherDateToggle.style";
 import { AutoComplete } from "../Autocomplete/AutoComplete";
@@ -75,17 +76,6 @@ const CitySearch = () => {
       setDateDisplayed(weatherDaily[0]);
     }
   }, [weatherDaily]);
-  // handles autocomplete visibility
-  useEffect(() => {
-    if (autocompleteSelected) {
-      setAutocompleteVisible(false);
-    } else if (inputSelected) {
-      setAutocompleteVisible(true);
-    }
-    if (!autocompleteSelected && !inputSelected) {
-      setAutocompleteVisible(false);
-    }
-  }, [autocompleteSelected, inputSelected]);
   // when geolocation loads sets searched location
   useEffect(() => {
     setLocation(geoLocation);
@@ -98,42 +88,81 @@ const CitySearch = () => {
       setLocation({ lat: result.latitude, lng: result.longitude });
     }
   }, [city]);
+  //
+  useEffect(() => {}, [city]);
+  // handles autocomplete visibility
+  useEffect(() => {
+    if (autocompleteSelected) {
+      setAutocompleteVisible(false);
+    } else if (inputSelected) {
+      setAutocompleteVisible(true);
+    }
+    if (inputSelected) {
+      setAutocompleteVisible(true);
+    }
+    if (!autocompleteSelected && !inputSelected) {
+      setAutocompleteVisible(false);
+    }
+  }, [autocompleteSelected, inputSelected]);
+  useEffect(() => {
+    setAutocompleteVisible(false);
+    setAutocompleteSelected(false);
+    setInputSelected(false);
+  }, [status]);
+  const element = document.activeElement;
+  console.log("status", status);
+  console.log("____");
   return (
     <Container>
       <CitySearchContainer>
         <MagnifyingGlassImage src={magnifyingGlass} alt="Magnifying glass" />
-        <CitySearchInput
-          value={city}
-          onFocus={(e) => {
-            console.log("input selected");
-            setAutocompleteVisible(true);
+        <InputAutoContainer
+          onClick={() => {
+            console.log("active InputAutoContainer");
           }}
-          onBlur={(e) => {
-            console.log("blur");
-            setInputSelected(false);
-            if (autocompleteSelected) {
+          onBlur={() => {
+            console.log("blur InputAutoContainer");
+          }}
+        >
+          <CitySearchInput
+            value={city}
+            onFocus={(e) => {
+              console.log("input selected");
+              setAutocompleteVisible(true);
+            }}
+            onBlur={(e) => {
+              // console.log("blur");
+              // console.log(city);
+              // console.log(element);
+              // setInputSelected(false);
+              // if (autocompleteSelected) {
               // setAutocompleteVisible(false);
-            }
-          }}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder={defaultPlaceHolder}
-          type="text"
-        />
-        {autocompleteVisible && (
-          <AutoComplete
-            onClick={(e) => {
-              console.log("autocomplete selected");
+              // }
+              // console.log("InputSelected", inputSelected);
+              // console.log("AutocompleteSelected", autocompleteSelected);
+              // console.log("AutocompleteVisible", autocompleteVisible);
             }}
-            options={usCityName}
-            filter={city}
-            optionsDisplayLength={8}
-            optionSelectFunction={(x: string) => {
-              console.log("option selected");
-              setCity(x);
-              setAutocompleteSelected(true);
-            }}
+            onChange={(e) => setCity(e.target.value)}
+            placeholder={defaultPlaceHolder}
+            type="text"
           />
-        )}
+          {autocompleteVisible && (
+            <AutoComplete
+              options={usCityName}
+              filter={city}
+              optionsDisplayLength={8}
+              optionSelectFunction={(x: string) => {
+                setCity(x);
+
+                // setAutocompleteSelected(true);
+                console.log("option selected");
+                // console.log("InputSelected", inputSelected);
+                // console.log("AutocompleteSelected", autocompleteSelected);
+                // console.log("AutocompleteVisible", autocompleteVisible);
+              }}
+            />
+          )}
+        </InputAutoContainer>
         <WeatherDateToggle
           onChange={(e) => {
             setDateDisplayed(weatherDaily[parseInt(e.target.value)]);

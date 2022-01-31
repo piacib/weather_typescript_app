@@ -6,7 +6,8 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 export const MagnifyingGlassImage = styled.img`
-  width: ${(props) => props.theme.citySearchContainer.widthMagnifyingGlassImage}; ;
+  width: ${(props) =>
+    props.theme.citySearchContainer.widthMagnifyingGlassImage}; ;
 `;
 export const CitySearchContainer = styled.div`
   background: white;
@@ -27,3 +28,4 @@ export const CitySearchInput = styled.input`
     font-size: 0.9rem;
   }
 `;
+export const InputAutoContainer = styled.div``;
