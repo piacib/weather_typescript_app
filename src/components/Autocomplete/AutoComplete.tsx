@@ -3,34 +3,47 @@ import {
   autocompleteOptionsFilter,
   AutocompleteOptionsFilterTypes,
 } from "./Autocomplete.functions";
-import { AutoCompleteContainer, Option } from "./Autocomplete.style";
-
+import {
+  AutocompleteForm,
+  AutocompleteInput,
+  AutocompleteList,
+  AutocompleteOption,
+} from "./Autocomplete.style";
+const listId = "autocompleteList";
 interface AutoCompleteProps extends AutocompleteOptionsFilterTypes {
-  optionSelectFunction: any;
+  inputValue: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  placeholderText?: string;
 }
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
   options,
   filter,
-  optionsDisplayLength = 8,
-  optionSelectFunction,
+  inputValue,
+  setInputValue,
+  placeholderText,
+  optionsDisplayLength,
 }) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
   return (
-    <>
-      {autocompleteOptionsFilter({
-        options: options,
-        filter: filter,
-        optionsDisplayLength: optionsDisplayLength,
-      }).length > 0 ? (
-        <AutoCompleteContainer>
-          {autocompleteOptionsFilter({
-            options: options,
-            filter: filter,
-            optionsDisplayLength: optionsDisplayLength,
-          }).map((x) => (
-            <Option onClick={() => optionSelectFunction(x)}>{x}</Option>
-          ))}
-        </AutoCompleteContainer>
-      ) : null}
-    </>
+    <AutocompleteForm onSubmit={(e) => handleSubmit(e)}>
+      <AutocompleteInput
+        type="search"
+        placeholder={placeholderText}
+        list={listId}
+        onChange={(e) => setInputValue(e.target.value)}
+        value={inputValue}
+      />
+      <AutocompleteList id={listId}>
+        {autocompleteOptionsFilter({
+          options: options,
+          filter: filter,
+          optionsDisplayLength: optionsDisplayLength,
+        }).map((x) => (
+          <AutocompleteOption>{x}</AutocompleteOption>
+        ))}
+      </AutocompleteList>
+    </AutocompleteForm>
   );
 };
