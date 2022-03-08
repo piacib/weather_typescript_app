@@ -39,10 +39,15 @@ export const useWeatherFetch = (coordinates: latLangUrlInput) => {
   useEffect(() => {
     const apiCalls = async () => {
       try {
+        // early exit condition if no coordinates are provided
         if (!coordinates.lat || !coordinates.lng) {
           return;
         }
         setStatus(searching);
+        // uses coordinates of city being searched to return the grid value of the coordinates
+        //  this is done because the weather api only returns weather inside a prespecified grid area
+        //  so city data mustbe converted to coordinates and then to a gridX and gridY value
+        //  for the weather api
         const gridFetch = await fetch(latLangURL(coordinates), {});
 
         if (gridFetch.status === 500) {
@@ -51,6 +56,7 @@ export const useWeatherFetch = (coordinates: latLangUrlInput) => {
         if (gridFetch.ok) {
           const gridJSON = await gridFetch.json();
           isDevModeConsoleLog("fetching weather data");
+          // fetches weather data for grid data fetched above
           const weatherFetch = await fetch(
             `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast`
           );
