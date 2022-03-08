@@ -38,33 +38,38 @@ export const useWeatherFetch = (coordinates: latLangUrlInput) => {
   const [weatherHourly, setWeatherHourly] = useState<WeatherDataArray>([]);
   useEffect(() => {
     const apiCalls = async () => {
-      if (!coordinates.lat || !coordinates.lng) {
-        return;
-      }
-      setStatus(searching);
-      const gridFetch = await fetch(latLangURL(coordinates), {});
-      if (gridFetch.status === 500) {
-        setStatus(failed);
-      }
-      if (gridFetch.ok) {
-        const gridJSON = await gridFetch.json();
-        isDevModeConsoleLog("fetching weather data");
-        const weatherFetch = await fetch(
-          `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast`
-        );
-        const weatherFetchHourly = await fetch(
-          `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast/hourly`
-        );
-        if (weatherFetch.status === 500) {
+      try {
+        if (!coordinates.lat || !coordinates.lng) {
+          return;
+        }
+        setStatus(searching);
+        const gridFetch = await fetch(latLangURL(coordinates), {});
+
+        if (gridFetch.status === 500) {
           setStatus(failed);
         }
-        if (weatherFetch.ok) {
-          const weatherJSON = await weatherFetch.json();
-          const weatherHourlyJSON = await weatherFetchHourly.json();
-          setWeatherDaily(weatherJSON.properties.periods);
-          setWeatherHourly(weatherHourlyJSON.properties.periods);
-          setStatus(loaded);
+        if (gridFetch.ok) {
+          const gridJSON = await gridFetch.json();
+          isDevModeConsoleLog("fetching weather data");
+          const weatherFetch = await fetch(
+            `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast`
+          );
+          const weatherFetchHourly = await fetch(
+            `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast/hourly`
+          );
+          if (weatherFetch.status === 500) {
+            setStatus(failed);
+          }
+          if (weatherFetch.ok) {
+            const weatherJSON = await weatherFetch.json();
+            const weatherHourlyJSON = await weatherFetchHourly.json();
+            setWeatherDaily(weatherJSON.properties.periods);
+            setWeatherHourly(weatherHourlyJSON.properties.periods);
+            setStatus(loaded);
+          }
         }
+      } catch {
+        setStatus(failed);
       }
     };
     apiCalls();
