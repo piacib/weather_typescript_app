@@ -11,35 +11,40 @@ import { WeatherDataArray } from "../../hooks/useWeatherFetch";
 const convertTime = (time: string) => {
   const hour = new Date(time).getHours();
   if (hour === 12) {
-    return `${hour}pm`;
+    return `${hour}:00 pm`;
   }
   if (hour === 0) {
-    return `12am`;
+    return `12:00 am`;
   }
   if (hour < 12) {
-    return `${hour}am`;
+    return `${hour}:00 am`;
   }
 
-  return `${hour - 12}pm`;
+  return `${hour - 12}:00 pm`;
 };
 interface ForecastHourlyProps {
   forecastHourlyArray: WeatherDataArray;
   startEntry?: number;
 }
-const ForecastHourly: React.FC<ForecastHourlyProps> = ({ forecastHourlyArray, startEntry = 0 }) => {
+const ForecastHourly: React.FC<ForecastHourlyProps> = ({
+  forecastHourlyArray,
+  startEntry = 0,
+}) => {
   return (
     <ForecastHourlyContainer>
       {forecastHourlyArray
-        ? forecastHourlyArray.slice(startEntry + 1, startEntry + 13).map((entry) => (
-            <ForecastHourlyEntryDisplay key={entry.number}>
-              <Time>{convertTime(entry.startTime)}</Time>
-              <Temperature>
-                {entry.temperature}
-                <span>&#176;</span>
-              </Temperature>
-              <Forecast>{entry.shortForecast}</Forecast>
-            </ForecastHourlyEntryDisplay>
-          ))
+        ? forecastHourlyArray
+            .slice(startEntry + 1, startEntry + 13)
+            .map((entry) => (
+              <ForecastHourlyEntryDisplay key={entry.number}>
+                <Time>{convertTime(entry.startTime)}</Time>
+                <Temperature>
+                  {entry.temperature}
+                  <span>&#176;</span>
+                </Temperature>
+                <Forecast>{entry.shortForecast}</Forecast>
+              </ForecastHourlyEntryDisplay>
+            ))
         : null}
     </ForecastHourlyContainer>
   );
