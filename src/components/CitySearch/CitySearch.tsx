@@ -24,11 +24,15 @@ type CityEntry = {
   longitude: number;
   latitude: number;
 };
+// json of all usCIties and lat and long
 const usCities: CityEntry[] = require("./usCities.json");
+// filtered name of cities
 const usCityName = usCities.map((entry) => entry.text);
+
 const defaultPlaceHolder = "Search your city";
 const locationFoundPlaceHolder = "Press search to use your location";
 const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 const CitySearch = () => {
   const { location, status: geoLocationStatus } = useGeoLocation();
   const [city, setCity] = useState<string>("");
@@ -38,10 +42,13 @@ const CitySearch = () => {
   });
   const [autocompleteVisible, setAutocompleteVisible] = useState<boolean>(false);
   const [autocompleteSelected, setAutocompleteSelected] = useState<boolean>(false);
+  
   const [inputSelected, setInputSelected] = useState<boolean>(false);
   const { weatherDaily, status, weatherHourly } = useWeatherFetch(searchedLocation);
+  
   const [dateDisplayed, setDateDisplayed] = useState<ForecastEntry | null>(null);
   const [forecastHourlyStartEntry, setForecastHourlyStartEntry] = useState<number>(0);
+  
   // sets starting point in hourly array to match WeatherDateToggle
   useEffect(() => {
     if (dateDisplayed) {
