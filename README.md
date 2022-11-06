@@ -6,9 +6,9 @@
 
 ## How to navigate this project
 
-- [image-sprite](public/icons/static/weather-sprite.svg)
+- custom [image-sprite](public/icons/static/weather-sprite.svg) to save on HTTP requests sent
 - [custom geolocation hook](src/hooks/useGeolocation.ts)
-- [custom wether data hook](src/hooks/useWeatherFetch.ts)
+- [custom weather data hook](src/hooks/useWeatherFetch.ts) with error handling and multiple api calls that utilize each others information
 
 ## Why I built the project this way
 
@@ -17,10 +17,6 @@
 
 ## If I had more time I would change this
 
-- Add user settings to adjust the window size and display
+- Add multi city search
 - Add testing
-- Add an eventlistener to automatically update pokemon data every move
-
-## Installation and usage
-
--
+- Implement map selection
