@@ -35,7 +35,6 @@ export const CitySearchInput = styled.input`
 `;
 // WeatherDateToggle
 export const WeatherDateToggle = styled.select`
-  width: 100px;
   margin: 10px auto;
   border-radius: 40px;
   padding: 8px;
