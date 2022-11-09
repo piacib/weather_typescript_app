@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 export const AutoCompleteContainer = styled.div`
+  display: none;
   width: 11rem;
   padding-bottom: 0.25rem;
   border-radius: 0 0 12px 12px;
   margin: 0
     ${(props) => props.theme.citySearchContainer.widthMagnifyingGlassImage};
+
   background-color: white;
   color: black;
   position: absolute;
@@ -19,6 +21,12 @@ export const AutoCompleteContainer = styled.div`
   }
   @media (max-width: ${(props) => props.theme.mediaSizes.mobileS}) {
     width: 8rem;
+  }
+  :focus,
+  :active,
+  :hover {
+    display: flex;
+    flex-direction: column;
   }
 `;
 export const Option = styled.div`

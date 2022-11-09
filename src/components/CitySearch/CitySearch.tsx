@@ -31,7 +31,20 @@ const usCityName = usCities.map((entry) => entry.text);
 
 const defaultPlaceHolder = "Search your city";
 const locationFoundPlaceHolder = "Press search to use your location";
-const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 const CitySearch = () => {
   const { location, status: geoLocationStatus } = useGeoLocation();
@@ -40,15 +53,16 @@ const CitySearch = () => {
     lat: 0,
     lng: 0,
   });
-  const [autocompleteVisible, setAutocompleteVisible] = useState<boolean>(false);
-  const [autocompleteSelected, setAutocompleteSelected] = useState<boolean>(false);
-  
-  const [inputSelected, setInputSelected] = useState<boolean>(false);
-  const { weatherDaily, status, weatherHourly } = useWeatherFetch(searchedLocation);
-  
-  const [dateDisplayed, setDateDisplayed] = useState<ForecastEntry | null>(null);
-  const [forecastHourlyStartEntry, setForecastHourlyStartEntry] = useState<number>(0);
-  
+  // const [inputSelected, setInputSelected] = useState<boolean>(false);
+  const { weatherDaily, status, weatherHourly } =
+    useWeatherFetch(searchedLocation);
+
+  const [dateDisplayed, setDateDisplayed] = useState<ForecastEntry | null>(
+    null
+  );
+  const [forecastHourlyStartEntry, setForecastHourlyStartEntry] =
+    useState<number>(0);
+
   // sets starting point in hourly array to match WeatherDateToggle
   useEffect(() => {
     if (dateDisplayed) {
@@ -56,7 +70,8 @@ const CitySearch = () => {
         (weather) => weather.startTime === dateDisplayed.startTime
       );
       console.log("startTime", startTime[0]);
-      startTime.length === 1 && setForecastHourlyStartEntry(startTime[0].number); //parseInt(startTime[0].startTime));
+      startTime.length === 1 &&
+        setForecastHourlyStartEntry(startTime[0].number); //parseInt(startTime[0].startTime));
     }
   }, [dateDisplayed, weatherHourly]);
   // sets datedisplayed when weather daily is initially loaded
@@ -65,24 +80,17 @@ const CitySearch = () => {
       setDateDisplayed(weatherDaily[0]);
     }
   }, [weatherDaily]);
-  // handles autocomlete visibility
-  useEffect(() => {
-    if (autocompleteSelected) {
-      setAutocompleteVisible(false);
-    } else if (inputSelected) {
-      setAutocompleteVisible(true);
-    }
-    if (!autocompleteSelected && !inputSelected) {
-      setAutocompleteVisible(false);
-    }
-  }, [autocompleteSelected, inputSelected]);
+
   // handles setting search location coords
   useEffect(() => {
     const result = usCities.find((usCity) => usCity.text === city);
     if (result) {
       setSearchedLocation({ lat: result.latitude, lng: result.longitude });
     } else if (geoLocationStatus === "loaded") {
-      if (location.lat !== searchedLocation.lat && location.lng !== searchedLocation.lng) {
+      if (
+        location.lat !== searchedLocation.lat &&
+        location.lng !== searchedLocation.lng
+      ) {
         setSearchedLocation(location);
       }
     }
@@ -95,38 +103,27 @@ const CitySearch = () => {
         <MagnifyingGlassImage src={magnifyingGlass} alt="Magnifying glass" />
         <CitySearchInput
           value={city}
-          onFocus={(e) => {
-            console.log("input selected");
-            setAutocompleteVisible(true);
-          }}
-          onBlur={(e) => {
-            console.log("blur");
-            setInputSelected(false);
-            if (autocompleteSelected) {
-              // setAutocompleteVisible(false);
-            }
-          }}
           onChange={(e) => setCity(e.target.value)}
           placeholder={
-            !location.lat && !location.lng ? defaultPlaceHolder : locationFoundPlaceHolder
+            !location.lat && !location.lng
+              ? defaultPlaceHolder
+              : locationFoundPlaceHolder
           }
           type="text"
+        ></CitySearchInput>
+
+        <AutoComplete
+          onClick={(e) => {
+            console.log("autocomplete selected");
+          }}
+          options={usCityName}
+          filter={city}
+          optionsDisplayLength={8}
+          optionSelectFunction={(x: string) => {
+            console.log("option selected");
+            setCity(x);
+          }}
         />
-        {autocompleteVisible && (
-          <AutoComplete
-            onClick={(e) => {
-              console.log("autocomplete selected");
-            }}
-            options={usCityName}
-            filter={city}
-            optionsDisplayLength={8}
-            optionSelectFunction={(x: string) => {
-              console.log("option selected");
-              setCity(x);
-              setAutocompleteSelected(true);
-            }}
-          />
-        )}
       </CitySearchContainer>
       {status === "searching" && <Loading />}
       {status === "failed" && <Failed />}
@@ -146,9 +143,9 @@ const CitySearch = () => {
           </WeatherDateToggle>
           <WeatherCard
             dayOfTheWeek={dateDisplayed.name}
-            todaysDate={`${month[new Date(dateDisplayed.startTime).getMonth()]} ${new Date(
-              dateDisplayed.startTime
-            ).getDate()}`}
+            todaysDate={`${
+              month[new Date(dateDisplayed.startTime).getMonth()]
+            } ${new Date(dateDisplayed.startTime).getDate()}`}
             temperature={dateDisplayed.temperature}
             iconSrc={dateDisplayed.icon}
             weatherDescription={dateDisplayed.shortForecast}

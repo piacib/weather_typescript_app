@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AutoComplete, AutoCompleteContainer } from "./AutoComplete";
 
 export const Container = styled.div`
   position: relative;
@@ -6,7 +7,8 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 export const MagnifyingGlassImage = styled.img`
-  width: ${(props) => props.theme.citySearchContainer.widthMagnifyingGlassImage}; ;
+  width: ${(props) =>
+    props.theme.citySearchContainer.widthMagnifyingGlassImage}; ;
 `;
 export const CitySearchContainer = styled.div`
   background: white;
@@ -23,6 +25,10 @@ export const CitySearchInput = styled.input`
   border: none;
   font-size: 1rem;
   width: 90%;
+  :focus + ${AutoCompleteContainer} {
+    display: flex;
+    flex-direction: column;
+  }
   @media (max-width: ${(props) => props.theme.mediaSizes.mobileS}) {
     font-size: 0.9rem;
   }
