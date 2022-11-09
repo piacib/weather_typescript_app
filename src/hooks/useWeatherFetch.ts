@@ -48,6 +48,7 @@ export const useWeatherFetch = (coordinates: latLangUrlInput) => {
         //  this is done because the weather api only returns weather inside a prespecified grid area
         //  so city data mustbe converted to coordinates and then to a gridX and gridY value
         //  for the weather api
+        console.log(latLangURL(coordinates));
         const gridFetch = await fetch(latLangURL(coordinates), {});
 
         if (gridFetch.status === 500) {
@@ -58,10 +59,10 @@ export const useWeatherFetch = (coordinates: latLangUrlInput) => {
           isDevModeConsoleLog("fetching weather data");
           // fetches weather data for grid data fetched above
           const weatherFetch = await fetch(
-            `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast`
+            gridJSON.properties.forecast
           );
           const weatherFetchHourly = await fetch(
-            `https://api.weather.gov/gridpoints/${gridJSON.properties.gridId}/${gridJSON.properties.gridX},${gridJSON.properties.gridY}/forecast/hourly`
+            gridJSON.properties.forecastHourly
           );
           if (weatherFetch.status === 500) {
             setStatus(failed);
