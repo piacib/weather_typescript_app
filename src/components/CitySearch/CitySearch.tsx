@@ -53,7 +53,7 @@ const CitySearch = () => {
     lat: 0,
     lng: 0,
   });
-  // const [inputSelected, setInputSelected] = useState<boolean>(false);
+  const [inputSelected, setInputSelected] = useState<boolean>(false);
   const { weatherDaily, status, weatherHourly } =
     useWeatherFetch(searchedLocation);
 
@@ -95,7 +95,6 @@ const CitySearch = () => {
       }
     }
     // will cause infinite loop if searchedLocation is added so I disabled the error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [city, geoLocationStatus, location]);
   return (
     <Container>
