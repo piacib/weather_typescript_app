@@ -1,4 +1,5 @@
 # Weather
+Welcome to my weather app! it provides weather info for a city from the national weather api and displays it for the upcoming week. 
 
 ## How I worked on this project
 
